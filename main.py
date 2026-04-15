@@ -1,33 +1,63 @@
 import json
-import pandas as pd
 import numpy as np
+import random
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
-with open("dest.json", "r") as file:
-   destinations = json.load(file)
-
-df = pd.DataFrame(destinations)
-
-df['text'] = df['name'] + " " + df['country'] + " " + df['description'] + " " + df['category']
+from db import SessionLocal
+from models import Destination
 
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
-df['embedding'] = df['text'].apply(lambda x: model.encode(x).tolist())
+with open("dest.json", "r") as file:
+    destinations = json.load(file)
 
-def find_similar(user_input, df):
-   user_embedding = model.encode([user_input])
-   similarities = cosine_similarity(user_embedding, list(df['embedding']))
-   sorted_indices = similarities[0].argsort()[::-1]
-   results = []
-   for i in sorted_indices[:3]:
-       results.append(df.iloc[i]['name'])
-   return results
+db = SessionLocal()
 
-query = input("Where do you want to travel? ")
+if db.query(Destination).count() == 0:
+    for d in destinations:
+        text = f"{d['name']} {d['country']} {d['description']} {d['category']}"
+        embedding = model.encode(text)
 
-results = find_similar(query, df)
+        emb_bytes = np.array(embedding).astype(np.float32).tobytes()
 
-print("\nTop 3 recommendations:")
-for r in results:
-   print(r)
+        dest = Destination(
+            name=d["name"],
+            country=d["country"],
+            description=d["description"],
+            category=d["category"],
+            embedding=emb_bytes
+        )
+
+        db.add(dest)
+
+    db.commit()
+
+
+def search(user_input):
+    user_embedding = model.encode([f"travel destination {user_input}"])
+
+    results = []
+    all_data = db.query(Destination).all()
+
+    for d in all_data:
+        emb = np.frombuffer(d.embedding, dtype=np.float32)
+        score = cosine_similarity(user_embedding, [emb])[0][0]
+        results.append((d, score))
+
+    results.sort(key=lambda x: x[1], reverse=True)
+
+    if len(results) == 0:
+        return []
+
+    top_results = results[:3]
+
+    for d, score in results:
+        print(f"{d.name}: {score:.4f}")
+
+    if top_results[0][1] < 0.3:
+        return [d for d, _ in random.sample(results, min(3, len(results)))]
+
+    return [d for d, _ in top_results]
+
+
