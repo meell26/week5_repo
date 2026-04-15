@@ -1,0 +1,62 @@
+ [
+   {
+       "name": "Paris",
+       "country": "France",
+       "description": "A city known for art, museums, historical landmarks like the Eiffel Tower, and charming cafes.",
+       "category": "Culture"
+   },
+   {
+       "name": "Bali",
+       "country": "Indonesia",
+       "description": "A tropical paradise with beaches, rice terraces, temples, and relaxing vibes.",
+       "category": "Beach"
+   },
+   {
+       "name": "Singapore",
+       "country": "Singapore",
+       "description": "A luxury destination with skyscrapers, shopping malls, desert adventures, and modern attractions.",
+       "category": "City"
+   },
+   {
+       "name": "Swiss Alps",
+       "country": "Switzerland",
+       "description": "Snowy mountains, skiing, breathtaking views, and peaceful nature.",
+       "category": "Nature"
+   },
+   {
+       "name": "Rome",
+       "country": "Italy",
+       "description": "Ancient history, ruins, delicious food, and iconic landmarks like the Colosseum.",
+       "category": "Culture"
+   },
+   {
+       "name": "Maldives",
+       "country": "Maldives",
+       "description": "Luxury overwater villas, crystal-clear water, and relaxing beach vibes.",
+       "category": "Beach"
+   },
+   {
+       "name": "New York",
+       "country": "USA",
+       "description": "A fast-paced city with skyscrapers, nightlife, shopping, and diverse culture.",
+       "category": "City"
+   },
+   {
+       "name": "Cappadocia",
+       "country": "Turkey",
+       "description": "Famous for hot air balloons, unique rock formations, and magical landscapes.",
+       "category": "Adventure"
+   },
+   {
+       "name": "Petra",
+       "country": "Jordan",
+       "description": "Ancient rock-carved city in the desert, full of history and cultural significance.",
+       "category": "Culture"
+   },
+   {
+       "name": "Iceland",
+       "country": "Iceland",
+       "description": "Volcanoes, glaciers, waterfalls, and northern lights in a dramatic natural landscape.",
+       "category": "Nature"
+   }
+]
